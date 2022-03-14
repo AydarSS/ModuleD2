@@ -1,0 +1,62 @@
+from news.models import *
+
+User.objects.create_user('User1'))
+User.objects.create_user('User2'))
+user1= User.objects.all()[0]
+user2= User.objects.all()[1]
+Author.objects.create(user = user1)
+Author.objects.create(user = user2)
+Category.objects.create(category_name=sport)
+Category.objects.create(category_name=politic) 
+Category.objects.create(category_name=education) 
+Category.objects.create(category_name=science)
+a1=Author.objects.all()[0]
+a2=Author.objects.all()[1]
+Post.objects.create(author=a1,type=news,title='Появились льготы на поступление в ВУЗ',text='В РОссии появились льготы на появление льгот для посткпления в ВУЗ. Это сделано в целях поддержики образования') 
+Post.objects.create(author=a1,type=article,title='Вратарь «Сочи» Денис Адамов получил травму в матче с «Химками» и покинул поле на носилках',text='Видео инцидента опубликовано в Telegram-канале «Матч ТВ»В компенсированное время ко второму тайму Адамов вышел за пределы штрафной площади, сыграл головой, но ст
+олкнулся с форвардом «Химок» Александром Руденко, из-за чего упал на шею и плечо.')
+Post.objects.create(author=a1,type=article,title='Добиться планетарной гегемонии: какую роль в мировой истории сыграла Доктрина Трумэна',text='5 лет назад президент США Гарри Трумэн выступил перед конгрессом с речью, которая легла в основу внешнеполитической доктрины Вашингтона. Американский лидер обвинил Советский Союз в навязывании народам других стран «режимов против их желания.') 
+ p1=Post.objects.all()[0]
+c1=Category.objects.all()[0]
+c2=Category.objects.all()[1]
+c3=Category.objects.all()[2]
+c4=Category.objects.all()[3]
+PostCategory.objects.create(post=p1,category=c1) 
+PostCategory.objects.create(post=p1,category=c2) 
+p2=Post.objects.all()[1]  
+PostCategory.objects.create(post=p2,category=c3) 
+PostCategory.objects.create(post=p2,category=c4) 
+PostCategory.objects.create(post=p2,category=c2)
+Comment.objects.create(comment_post=p1,comment_user=user1,comment_text='Лайк, однозначно') 
+Comment.objects.create(comment_post=p1,comment_user=user1,comment_text='Лайк, два раза')  
+Comment.objects.create(comment_post=p1,comment_user=user2,comment_text='А мне не оч')  
+Comment.objects.create(comment_post=p2,comment_user=user2,comment_text='А второй пост норм') 
+p1.like()
+p1.like()
+p1.like()
+p1.dislike() 
+p2.like()
+p2.like()
+c1 = Comment.objects.all()[1]
+c1.like()
+a1.update_rating() 
+best_author=Author.objects.all().order_by('-rating')[:1] 
+best_author[0].user.username
+best_author[0].rating
+best_post = Post.objects.all().order_by('-post_rating')[:1]
+best_post[0].time_in
+best_post[0].author.user.username
+best_post[0].preview()  
+best_post[0].title 
+comment_list = Comment.objects.filter(comment_post=best_post[0]).values('comment_text','comment_rating','create_datetime','comment_user') 
+for comment in comment_list: 
+	user_id = comment.get('comment_user') 
+    userQueryset = User.objects.filter(pk=user_id)
+    userObj = userQueryset[0]          
+    comment['username']=userObj.username
+print(comment_list)
+best_post.comment_set.all()
+
+
+
+
