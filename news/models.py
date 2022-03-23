@@ -63,6 +63,9 @@ class Post(models.Model):
 
     category = models.ManyToManyField(Category, through='PostCategory')
 
+    def __str__(self):
+        return f'{self.title}'
+
     def like(self):
         self.post_rating += 1
         self.save()
