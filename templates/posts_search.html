@@ -1,0 +1,32 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Posts
+{% endblock title %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="GET">
+    {{ filter.form.title }}
+    {{ filter.form.author }}
+    <input type="date" name='date' id="filter.form.date"  class="bd-form-input" >
+    <input type="submit" value="Найти">
+</form>
+   <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата публикации</td>
+               <td>Статья</td>
+           </tr>
+      {% for post in filter.qs %}
+           <tr>
+               <td>{{ post.title|censura}}</td>
+               <td>{{ post.time_in|date:'d.m.Y' }}</td>
+               <td>{{ post.text|truncatechars:20 }}</td>
+           </tr>
+           {% endfor %}
+   </table>
+
+{% endblock content %}

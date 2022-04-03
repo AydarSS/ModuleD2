@@ -1,0 +1,24 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}Posts{% endblock title %}
+{% load custom_filters %}
+{% block content %}
+<table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата публикации</td>
+               <td>Статья</td>
+           </tr>
+            <tr>
+               <td>{{ post.title|censura}}</td>
+               <td>{{ post.time_in|date:'d.m.Y' }}</td>
+               <td>{{ post.text|truncatechars:20 }}</td>
+           </tr>
+</table>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+{% endblock content %}

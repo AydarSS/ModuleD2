@@ -26,6 +26,9 @@ class Author(models.Model):
         self.rating = pRat+cRat+cmRat
         self.save()
 
+    def __str__(self):
+        return f'{self.user.username}'
+
 
 
 sport = 'SP'
@@ -76,6 +79,9 @@ class Post(models.Model):
 
     def preview(self):
         return self.text[:123] + '...'
+
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/news/{self.id}'
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
