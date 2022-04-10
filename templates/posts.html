@@ -35,6 +35,12 @@ Posts
    {% endif %}
 
 <a href="{% url 'post_create' %}">Добавить новую новость</a> <br>
+
+<a href="{% url 'profile_update' %}">Редактировать профиль</a> <br>
+<button> <a href="/sign/logout/">Выйти</a> </button>
+{% if is_not_author %}
+<button> <a href="/sign/upgrade/">Стать автором</a> </button>
+{% endif %}
 {% if is_paginated %}
 
     {% if page_obj.has_previous %}
