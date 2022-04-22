@@ -1,10 +1,12 @@
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.views.generic import *
-from .models import Post, User
+from .models import Post, User, Category
 from.filters import PostFilter
-from .forms import PostForm,UserForm  # импортируем нашу форму
+from .forms import PostForm, UserForm, CategorySubscribeForm  # импортируем нашу форму
 
 class PostsList(LoginRequiredMixin, ListView):
     model = Post
@@ -18,6 +20,7 @@ class PostsList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        context['categories'] = Category.objects.all()
         return context
 
 
@@ -33,6 +36,10 @@ class PostCreateView(PermissionRequiredMixin, LoginRequiredMixin,CreateView):
     template_name = 'post_create.html'
     form_class = PostForm
 
+
+
+
+
 class PostsListSearch(LoginRequiredMixin,ListView):
     model = Post
     ordering = '-time_in'
@@ -46,7 +53,6 @@ class PostsListSearch(LoginRequiredMixin,ListView):
         return context
 
 
-
 class PostUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     permission_required = ('news.add_post', 'news.change_post')
     template_name = 'post_create.html'
@@ -56,6 +62,9 @@ class PostUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
+
+
+
 
 
 # дженерик для удаления товара
@@ -73,3 +82,28 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
     def get_object(self, **kwargs):
         return self.request.user
+
+
+class CategoryView (DetailView):
+    model = Category
+    template_name = 'categories_posts.html'
+
+    # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Category.objects.get(pk=id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs.get('pk')
+        cat = Category.objects.get(pk=id)
+        context['posts'] = Post.objects.filter(category=cat)
+        return context
+
+class SubscribeForm(View):
+    def post(self,request, pk):
+        category = Category.objects.get(pk=pk)
+        category.addsubscriber(request.user)
+        return redirect ('/news/')
+
+

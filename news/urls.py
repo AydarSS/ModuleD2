@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 # Импортируем созданное нами представление
-from .views import PostsList, PostsListSearch, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ProfileUpdateView
+from .views import PostsList, PostsListSearch, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, \
+   ProfileUpdateView, CategoryView, SubscribeForm
 
 urlpatterns = [
    # path — означает путь.
@@ -18,6 +19,8 @@ urlpatterns = [
    path('create/<int:pk>', PostUpdateView.as_view(), name='post_update'),
    path('delete/<int:pk>', PostDeleteView.as_view(), name='post_delete'),
    path('user_update/', ProfileUpdateView.as_view(), name='profile_update'),
+   path('category/<int:pk>/', CategoryView.as_view(), name='category'),
+   path('subscribe/<int:pk>/', SubscribeForm.as_view(), name='subscribe'),
 
 
 ]

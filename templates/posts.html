@@ -10,6 +10,18 @@ Posts
 {% block content %}
 <h1>Все новости</h1>
  <h3>{{ posts|length}}</h3>
+ <table>
+     <tr>
+
+           </tr>
+           <tr>
+                  <td>Категории</td>
+
+               {% for category in categories %}}
+               <td> <a href="{% url 'category' category.id %}">{{ category.category_name }}</a></td>
+                {% endfor %}
+           </tr>
+ </table>
  <hr>
  {% if posts %}
    <table>
@@ -17,6 +29,7 @@ Posts
                <td>Заголовок</td>
                <td>Дата публикации</td>
                <td>Статья</td>
+               <td>Категория</td>
            </tr>
     {% for post in posts %}
            <tr>
@@ -27,6 +40,9 @@ Posts
         </td>
                <td>{{ post.time_in|date:'d.m.Y' }}</td>
                <td>{{ post.text|truncatechars:20 }}</td>
+               {% for category in post.category.all %}
+                <td>{{ category.category_name}}</td>
+                {% endfor %}
            </tr>
            {% endfor %}
    </table>
@@ -35,6 +51,7 @@ Posts
    {% endif %}
 
 <a href="{% url 'post_create' %}">Добавить новую новость</a> <br>
+
 
 <a href="{% url 'profile_update' %}">Редактировать профиль</a> <br>
 <button> <a href="/sign/logout/">Выйти</a> </button>

@@ -44,6 +44,14 @@ CATEGORIES = [
 
 class Category(models.Model):
     category_name = models.CharField(max_length=2, choices=CATEGORIES, unique=True)
+    subscriber = models.ManyToManyField(User, related_name= 'user_subscribers')
+
+    def addsubscriber(self, user):
+        self.subscriber.add(user)
+
+    def __str__(self):
+        return self.category_name
+
 
 
 news = 'NWS'
@@ -101,5 +109,7 @@ class Comment(models.Model):
     def dislike(self):
         self.comment_rating -= 1
         self.save()
+
+
 
 

@@ -1,0 +1,33 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+{% load custom_filters %}
+<h1>Новости из категории {{ category.category_name }}</h1>
+ <hr>
+ {% if posts %}
+   <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата публикации</td>
+               <td>Статья</td>
+           </tr>
+ {% for post in posts %}
+           <tr>
+
+                <td>{{ post.title}}</td>
+               <td>{{ post.time_in|date:'d.m.Y' }}</td>
+               <td>{{ post.text}}</td>
+
+           </tr>
+ {% endfor %}
+   </table>
+   {% else %}
+       <h2>Новостей нет!</h2>
+   {% endif %}
+
+<form action="{% url 'subscribe' category.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Подписаться на {{ category.category_name }}">
+</form>
+
+{% endblock content %}
