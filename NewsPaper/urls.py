@@ -17,6 +17,7 @@ from django.contrib import admin
 
 from django.urls import path, include
 
+from news.views import IndexView
 
 urlpatterns = [
 
@@ -25,4 +26,6 @@ urlpatterns = [
     path('news/', include('news.urls')),
     path('sign/', include('sign.urls')),
     path('accounts/', include('allauth.urls')),
+    path('',IndexView.as_view()),
+
 ]

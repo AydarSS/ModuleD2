@@ -1,12 +1,17 @@
-# Импортируем класс, который говорит нам о том,
-# что в этом представлении мы будем выводить список объектов из БД
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import *
-from .models import Post, User, Category
+from .models import Post,Category
 from.filters import PostFilter
-from .forms import PostForm, UserForm, CategorySubscribeForm  # импортируем нашу форму
+from .forms import PostForm, UserForm
+
+
+
+class IndexView(View):
+    def get(self, request):
+        return HttpResponse('Hello!')
+
 
 class PostsList(LoginRequiredMixin, ListView):
     model = Post
@@ -35,8 +40,6 @@ class PostCreateView(PermissionRequiredMixin, LoginRequiredMixin,CreateView):
     permission_required = ('news.add_post','news.change_post')
     template_name = 'post_create.html'
     form_class = PostForm
-
-
 
 
 

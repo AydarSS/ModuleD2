@@ -17,24 +17,8 @@ logger = logging.getLogger(__name__)
 
 # наша задача по выводу текста на экран
 def my_job():
-    last_week_date = date.today()-timedelta(days=7)
-    dict_sample = {}
-    for category in  Category.objects.all():
-        print(category)
-        for subscriber in category.subscriber.all():
-            print(subscriber)
-            posts = Post.objects.filter(time_in__gt=last_week_date, category = category)
-            for post in posts:
+    send_mail_every_week.delay()
 
-                dict_sample[f'http://127.0.0.1:8000/news/{post.id}'] = post.title
-            if dict_sample:
-                send_mail(
-                  subject=f'Привет {subscriber.username} , интересные статьи за неделю',
-                  message= '; '.join([f'{key}: {value}' for key, value in dict_sample.items()]),
-                  from_email='xxx@yandex.ru',
-                  recipient_list=[subscriber.email]
-                  )
-            dict_sample.clear()
 
 
 

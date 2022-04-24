@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
+
+CELERY_BROKER_URL = 'redis://:TPr3FD1A7ikN9oOXAMqCSQ21VUZhlvsY@redis-14889.c12.us-east-1-4.ec2.cloud.redislabs.com:14889/0'
+CELERY_RESULT_BACKEND = 'redis://:TPr3FD1A7ikN9oOXAMqCSQ21VUZhlvsY@redis-14889.c12.us-east-1-4.ec2.cloud.redislabs.com:14889/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Secondspython manage.py migrate
 
