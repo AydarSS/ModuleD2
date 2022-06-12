@@ -14,6 +14,8 @@ Posts
      <tr>
 
            </tr>
+     {% load cache %}
+     {% cache 300 categoriesheader %}
            <tr>
                   <td>Категории</td>
 
@@ -21,6 +23,7 @@ Posts
                <td> <a href="{% url 'category' category.id %}">{{ category.category_name }}</a></td>
                 {% endfor %}
            </tr>
+     {% endcache %}
  </table>
  <hr>
  {% if posts %}

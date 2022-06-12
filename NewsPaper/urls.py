@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from news.views import IndexView
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
 
@@ -26,6 +27,6 @@ urlpatterns = [
     path('news/', include('news.urls')),
     path('sign/', include('sign.urls')),
     path('accounts/', include('allauth.urls')),
-    path('',IndexView.as_view()),
+    path('', cache_page(60*1)(IndexView.as_view())),
 
 ]

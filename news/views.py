@@ -5,6 +5,7 @@ from django.views.generic import *
 from .models import Post,Category
 from.filters import PostFilter
 from .forms import PostForm, UserForm
+from django.core.cache import cache
 
 
 
@@ -61,10 +62,14 @@ class PostUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     template_name = 'post_create.html'
     form_class = PostForm
 
-    # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
-    def get_object(self, **kwargs):
-        id = self.kwargs.get('pk')
-        return Post.objects.get(pk=id)
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            id = self.kwargs.get('pk')
+            obj = Post.objects.get(pk=id)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
+
 
 
 

@@ -13,6 +13,123 @@ import os
 from pathlib import Path
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style' : '{',
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+        'verbosewarning': {
+            'format': '%(levelname)s %(asctime)s %(message)s %(pathname)s'
+        },
+        'verboseerror': {
+            'format': '%(exc_info)s %(levelname)s %(asctime)s %(message)s %(pathname)s'
+        },
+        'verbosetimelevelmodule': {
+                    'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+        'verbosetimelevelmespathstack': {
+                    'format': '%(levelname)s %(asctime)s %(pathname)s %(message)s %(exc_info)s'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_flase': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'consoleandpath': {
+                    'level': 'WARNING',
+                    'filters': ['require_debug_true'],
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'verbosewarning'
+                },
+        'consoleandstack': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verboseerror'
+        },
+        'filegeneral': {
+                    'level': 'INFO',
+                    'filters': ['require_debug_false'],
+                    'class': 'logging.FileHandler',
+                    'filename': 'general.log',
+                    'formatter': 'verbosetimelevelmodule'
+                },
+        'fileerror': {
+                    'level': 'ERROR',
+                    'class': 'logging.FileHandler',
+                    'filename': 'errors.log',
+                    'formatter': 'verbosetimelevelmespathstack'
+                },
+        'securityerror': {
+                    'level': 'ERROR',
+                    'class': 'logging.FileHandler',
+                    'filename': 'security.log',
+                    'formatter': 'verbosetimelevelmodule'
+                },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console','consoleandpath', 'consoleandstack','filegeneral'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['fileerror','mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['fileerror','mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.template': {
+            'handlers': ['fileerror'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db_backends': {
+            'handlers': ['fileerror'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['securityerror'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+    }
+}
+
+
 CELERY_BROKER_URL = 'redis://:TPr3FD1A7ikN9oOXAMqCSQ21VUZhlvsY@redis-14889.c12.us-east-1-4.ec2.cloud.redislabs.com:14889/0'
 CELERY_RESULT_BACKEND = 'redis://:TPr3FD1A7ikN9oOXAMqCSQ21VUZhlvsY@redis-14889.c12.us-east-1-4.ec2.cloud.redislabs.com:14889/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -35,7 +152,7 @@ EMAIL_USE_SSL = True  # Яндекс использует ssl, подробне�
 
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 
